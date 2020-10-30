@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage>{
   void _startTimer(){
     _timer = Timer.periodic(Duration(milliseconds: 900), (timer) {
       setState(() {
-        if(_seconds > 0){
+        if(_seconds >= 0){
           _timerString = _converterSeconds(_seconds);
           _seconds --;
         }else{
