@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class HomePage extends StatefulWidget{
   HomePage({Key key, this.title}) : super(key: key);
@@ -12,8 +13,44 @@ class HomePage extends StatefulWidget{
 }
 
 class _HomePageState extends State<HomePage>{
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  @override
+  void initState() {
+    super.initState();
+    var androidInitilize = new AndroidInitializationSettings('app_icon');
+    var iOSinitilize = new IOSInitializationSettings();
+    var initilizationsSettings =
+    new InitializationSettings(android: androidInitilize, iOS: iOSinitilize);
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initilizationsSettings,
+        onSelectNotification: notificationSelected);
+  }
+
+  Future notificationSelected(String payload) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("Notification : $payload"),
+      ),
+    );
+  }
+
+  Future _showNotification() async {
+    var androidDetails = new AndroidNotificationDetails(
+        "Channel ID", "Desi programmer", "This is my channel",
+        importance: Importance.max);
+    var iSODetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+    new NotificationDetails(android: androidDetails, iOS: iSODetails);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, "Time Break"," Take a break and then keep working!",
+        generalNotificationDetails, payload: "Time Break ");
+  }
+  // fim notification
+
   bool _timeOn = false;
-  int _seconds = 1500;
+  int _seconds = 20;
   String _timerString = "25:00";
   Timer _timer;
 
@@ -25,6 +62,7 @@ class _HomePageState extends State<HomePage>{
           _seconds --;
         }else{
           _timer.cancel();
+          _showNotification();
         }
       });
     });
