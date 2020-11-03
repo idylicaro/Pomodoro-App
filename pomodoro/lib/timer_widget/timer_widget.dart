@@ -48,36 +48,62 @@ class _TimerWidgetState extends State<TimerWidget>{
   }
   // fim notification
 
+  int _cycleIndex = 0;
   bool _timeOn = false;
-  int _seconds = 20;
+  var _seconds = [1500,300,1500];
   String _timerString = "25:00";
   Timer _timer;
 
+  void _cycleSwitch(){
+    switch(_cycleIndex){
+      case 0:{setState(() {
+        _cycleIndex = 1;
+      });}
+      break;
+      case 1:{setState(() {
+        _cycleIndex = 2;
+      });}
+      break;
+      case 2:{setState(() {
+        _cycleIndex = 0;
+      });}
+      break;
+    }
+  }
+   void _endTimer(){
+    setState(() {
+      _showNotification();
+      _cycleSwitch();
+    });
+   }
   void _startTimer(){
-    _timer = Timer.periodic(Duration(milliseconds: 900), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        if(_seconds >= 0){
-          _timerString = _converterSeconds(_seconds);
-          _seconds --;
+        if(_seconds[_cycleIndex] >= 0){
+          _timerString = _converterSeconds(_seconds[_cycleIndex]);
+          _seconds[_cycleIndex] --;
         }else{
           _timer.cancel();
-          _showNotification();
+          _endTimer();
         }
       });
     });
   }
-  void _timeTogle(){
+
+  void _timeOnTogle(){
     setState(() {
       _timeOn = !_timeOn;
     });
     if (!_timeOn) _pauseTimer(); else _startTimer();
   }
+
   void _pauseTimer(){
     setState(() {
       _timeOn = false;
       _timer.cancel();
     });
   }
+
   String _converterSeconds(int seconds){
     int _mm,_ss;
     _ss = seconds % 60;
@@ -108,7 +134,7 @@ class _TimerWidgetState extends State<TimerWidget>{
               highlightedBorderColor:Colors.amber[800],
               textColor: Colors.amber[800],
               child: Text("Start",style: TextStyle(fontSize: 24)),
-              onPressed: () => _timeTogle(),
+              onPressed: () => _timeOnTogle(),
             )
           ],
         ),
