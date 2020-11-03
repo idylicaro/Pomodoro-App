@@ -43,6 +43,7 @@ class _TimerWidgetState extends State<TimerWidget>{
     new NotificationDetails(android: androidDetails, iOS: iSODetails);
 
     await flutterLocalNotificationsPlugin.show(
+        // TODO: dynamic message
         0, "Time Break"," Take a break and then keep working!",
         generalNotificationDetails, payload: "Time Break ");
   }
@@ -53,6 +54,17 @@ class _TimerWidgetState extends State<TimerWidget>{
   var _seconds = [1500,300,1500];
   String _timerString = "25:00";
   Timer _timer;
+
+  String _getStatusOfCycle(){
+    if(_cycleIndex != 1)
+      return "Focusing!";
+    return "Coffe Break!";
+  }
+  String _getStatusOfButton(){
+    if(_timeOn == true)
+      return "Pause";
+    return "Play";
+  }
 
   void _cycleSwitch(){
     switch(_cycleIndex){
@@ -70,12 +82,15 @@ class _TimerWidgetState extends State<TimerWidget>{
       break;
     }
   }
+
    void _endTimer(){
     setState(() {
       _showNotification();
       _cycleSwitch();
+      _timeOn = false;
     });
    }
+
   void _startTimer(){
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
@@ -124,6 +139,8 @@ class _TimerWidgetState extends State<TimerWidget>{
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Text(_getStatusOfCycle(),style:TextStyle(color: Colors.amber[800], decoration: TextDecoration.none,fontSize: 24)),
+            Container(height: 30),
             Icon(Icons.timer_rounded, color:Colors.amber[800],size: 80),
             Container(height: 50),
             Text(_timerString,style:TextStyle(color: Colors.amber[800], decoration: TextDecoration.none)),
@@ -133,7 +150,7 @@ class _TimerWidgetState extends State<TimerWidget>{
               highlightColor:Colors.amber[800].withOpacity(0.3),
               highlightedBorderColor:Colors.amber[800],
               textColor: Colors.amber[800],
-              child: Text("Start",style: TextStyle(fontSize: 24)),
+              child: Text(_getStatusOfButton(),style: TextStyle(fontSize: 24)),
               onPressed: () => _timeOnTogle(),
             )
           ],
