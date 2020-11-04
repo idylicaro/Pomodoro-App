@@ -138,10 +138,24 @@ class _TimerWidgetState extends State<TimerWidget>{
 
   String _converterSeconds(int seconds){
     int _mm,_ss;
+    String _str_mm, _str_ss;
     _ss = seconds % 60;
     seconds = seconds ~/ 60;
     _mm = seconds % 60;
-    return "$_mm:$_ss";
+
+    if (_mm < 10) { // minutes format
+    _str_mm = "0$_mm";
+    }else{
+    _str_mm = "$_mm";
+    }
+
+    if (_ss < 10) { // seconds format
+      _str_ss = "0$_ss";
+    }else{
+      _str_ss = "$_ss";
+    }
+
+    return "$_str_mm:$_str_ss";
   }
 
   @override
