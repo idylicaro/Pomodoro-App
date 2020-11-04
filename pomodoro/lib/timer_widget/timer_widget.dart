@@ -177,6 +177,9 @@ class _TimerWidgetState extends State<TimerWidget>{
             Text(_timerString,style:TextStyle(color: Colors.amber[800], decoration: TextDecoration.none)),
             Container(height: 45),
             OutlineButton(
+              //shape: StadiumBorder(),
+              borderSide: BorderSide(color: Colors.amber[800]),
+              disabledBorderColor: Colors.amber[800],
               color: Colors.amber[800],
               highlightColor:Colors.amber[800].withOpacity(0.3),
               highlightedBorderColor:Colors.amber[800],
