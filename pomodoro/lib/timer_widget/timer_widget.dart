@@ -47,10 +47,10 @@ class _TimerWidgetState extends State<TimerWidget>{
         generalNotificationDetails, payload: _getNameNotification());
   }
   // fim notification
-
+  static var _secondsBaseCycleRestart = [1500,300];
   int _cycleIndex = 0;
   bool _timeOn = false;
-  var _seconds = [1500,300,1500];
+  var _seconds = [1500,300];
   String _timerString = "25:00";
   Timer _timer;
 
@@ -84,10 +84,6 @@ class _TimerWidgetState extends State<TimerWidget>{
       });}
       break;
       case 1:{setState(() {
-        _cycleIndex = 2;
-      });}
-      break;
-      case 2:{setState(() {
         _cycleIndex = 0;
       });}
       break;
@@ -97,6 +93,7 @@ class _TimerWidgetState extends State<TimerWidget>{
    void _endTimer(){
     setState(() {
       _showNotification();
+      _seconds[_cycleIndex] = _secondsBaseCycleRestart[_cycleIndex];
       _cycleSwitch();
       _timeOn = false;
     });
