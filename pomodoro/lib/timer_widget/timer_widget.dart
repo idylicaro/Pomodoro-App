@@ -48,7 +48,8 @@ class _TimerWidgetState extends State<TimerWidget>{
   }
   // fim notification
   static var _secondsBaseCycleRestart = [1500,300];
-  int _cycleIndex = 0;
+  int _cycleIndex = 0; // current index in cycle (focusing or time break
+  int _countCycles = 0;
   bool _timeOn = false;
   var _seconds = [1500,300];
   String _timerString = "25:00";
@@ -69,7 +70,7 @@ class _TimerWidgetState extends State<TimerWidget>{
   String _getTextStatusOfCycle(){
     if(_cycleIndex != 1)
       return "Focusing!";
-    return "Coffe Break!";
+    return "Time break!";
   }
   String _getTextStatusOfButton(){
     if(_timeOn == true)
@@ -81,9 +82,17 @@ class _TimerWidgetState extends State<TimerWidget>{
     switch(_cycleIndex){
       case 0:{setState(() {
         _cycleIndex = 1;
+        _countCycles++;
+        if(_countCycles == 4){ // get long break time
+          _seconds[_cycleIndex] = 1800;
+        }
       });}
       break;
       case 1:{setState(() {
+        if(_countCycles == 4){ // get long break time
+          _seconds[_cycleIndex] = _secondsBaseCycleRestart[_cycleIndex];
+          _countCycles = 0;
+        }
         _cycleIndex = 0;
       });}
       break;
