@@ -43,9 +43,8 @@ class _TimerWidgetState extends State<TimerWidget>{
     new NotificationDetails(android: androidDetails, iOS: iSODetails);
 
     await flutterLocalNotificationsPlugin.show(
-        // TODO: dynamic message
-        0, "Time Break"," Take a break and then keep working!",
-        generalNotificationDetails, payload: "Time Break ");
+        0, _getNameNotification(),_getTextNotification(),
+        generalNotificationDetails, payload: _getNameNotification());
   }
   // fim notification
 
@@ -55,12 +54,24 @@ class _TimerWidgetState extends State<TimerWidget>{
   String _timerString = "25:00";
   Timer _timer;
 
-  String _getStatusOfCycle(){
+
+  String _getTextNotification(){
+    if(_cycleIndex != 1)
+      return "Take a break";
+    return "Let's focusing again";
+  }
+  String _getNameNotification(){
+    if(_cycleIndex != 1)
+      return "Time break!";
+    return "Focusing!";
+  }
+
+  String _getTextStatusOfCycle(){
     if(_cycleIndex != 1)
       return "Focusing!";
     return "Coffe Break!";
   }
-  String _getStatusOfButton(){
+  String _getTextStatusOfButton(){
     if(_timeOn == true)
       return "Pause";
     return "Play";
@@ -139,7 +150,7 @@ class _TimerWidgetState extends State<TimerWidget>{
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(_getStatusOfCycle(),style:TextStyle(color: Colors.amber[800], decoration: TextDecoration.none,fontSize: 24)),
+            Text(_getTextStatusOfCycle(),style:TextStyle(color: Colors.amber[800], decoration: TextDecoration.none,fontSize: 24)),
             Container(height: 30),
             Icon(Icons.timer_rounded, color:Colors.amber[800],size: 80),
             Container(height: 50),
@@ -150,7 +161,7 @@ class _TimerWidgetState extends State<TimerWidget>{
               highlightColor:Colors.amber[800].withOpacity(0.3),
               highlightedBorderColor:Colors.amber[800],
               textColor: Colors.amber[800],
-              child: Text(_getStatusOfButton(),style: TextStyle(fontSize: 24)),
+              child: Text(_getTextStatusOfButton(),style: TextStyle(fontSize: 24)),
               onPressed: () => _timeOnTogle(),
             )
           ],
