@@ -109,7 +109,7 @@ class _TimerWidgetState extends State<TimerWidget>{
    }
 
   void _startTimer(){
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 959), (timer) {
       setState(() {
         if(_seconds[_cycleIndex] >= 0){
           _timerString = _converterSeconds(_seconds[_cycleIndex]);
